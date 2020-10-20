@@ -1,0 +1,11 @@
+{
+  "name": "bluffs",
+  "version": "1.0.0",
+  "description": "A site for the Bedford Bluffs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Will Theodore",
+  "license": "UNLICENSED"
+}
