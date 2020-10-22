@@ -34,3 +34,9 @@
   font-family: "heebo-regular";
   font-size: 36px;
 }
+
+@mixin white-border {
+  border-width: 3px;
+  border-style: solid;
+  border-color: white;
+}

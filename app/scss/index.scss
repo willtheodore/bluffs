@@ -1,6 +1,9 @@
 @import "./fonts.scss";
 @import "./colors.scss";
 @import "./home.scss";
+@import "./info.scss";
+@import "./about.scss";
+@import "./components.scss";
 
 #app,
 body,
@@ -8,6 +11,11 @@ html {
   margin: 0;
   height: 100%;
   width: 100%;
+  background-color: $darkBlue;
+}
+
+::-webkit-scrollbar {
+  width: 0;
 }
 
 h1,
@@ -29,8 +37,38 @@ ul {
   padding: 0;
 }
 
+.float-right {
+  float: right;
+}
+
 .container {
+  background-color: $darkBlue;
   margin: 0 auto;
+}
+
+.content-wrapper {
+  background: white;
+  border-radius: 7px;
+  color: black;
+  padding: 10px 30px;
+
+  p {
+    @include body;
+    margin: 15px 0 0;
+  }
+}
+
+.btn {
+  border-radius: 4px;
+  @include body;
+  border: none;
+  padding: 5px 15px;
+}
+
+.clear {
+  background: none;
+  color: inherit;
+  padding: 0;
 }
 
 nav {
@@ -46,13 +84,14 @@ nav {
   justify-content: space-between;
   color: white;
   overflow: hidden;
+  z-index: 99;
 
   .logotype {
     display: flex;
     align-items: center;
     padding: 15px 20px;
 
-    h1 {
+    a {
       font-family: "heebo-bold";
       font-size: 48px;
       display: inline;
@@ -76,10 +115,49 @@ nav {
     button {
       background-color: white;
       color: black;
-      border-radius: 4px;
-      @include body;
-      border: none;
-      padding: 5px 15px;
     }
+  }
+}
+
+#fourohfour {
+  margin: 120px 0 50vh 20px;
+  color: white;
+  height: 100%;
+
+  h1 {
+    @include header-large;
+    font-size: 8vw;
+  }
+}
+
+#footer {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: $lightBlue;
+  color: white;
+  align-items: center;
+  justify-content: center;
+
+  ul {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    a {
+      margin: 10px 20px 0;
+      @include body;
+    }
+
+    button {
+      margin: 10px 20px 0;
+    }
+  }
+
+  p {
+    @include body;
+    margin: 10px 0;
+    opacity: 60%;
   }
 }

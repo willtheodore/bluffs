@@ -1,5 +1,5 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import VerticalLine from "../vectors/VerticalLine"
 
 const activeStyle = {
@@ -11,37 +11,37 @@ export default function Nav() {
   return (
     <nav>
       <div className="logotype">
-        <h1>Bedford Bluffs</h1>
+        <NavLink to="/">Bedford Bluffs</NavLink>
         <VerticalLine />
       </div>
 
       <ul>
-        <Link
+        <NavLink
           activeStyle={activeStyle}
-          to="./swim/">
+          to="/swim">
           <p>Swim</p>
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           activeStyle={activeStyle}
-          to="./tennis/">
+          to="/tennis/">
           <p>Tennis</p>
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           activeStyle={activeStyle}
-          to="./about/">
+          to="/about/">
           <p>About</p>
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           activeStyle={activeStyle}
-          to="./contact/">
+          to="/contact/">
           <p>Contact</p>
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           activeStyle={activeStyle}
-          to="./members/">
+          to="/members/">
           <p>Members</p>
-        </Link>
-        <button>
+        </NavLink>
+        <button className="btn">
           Login
         </button>
       </ul>
