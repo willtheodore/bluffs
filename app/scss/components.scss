@@ -19,3 +19,87 @@
     color: white;
   }
 }
+
+.modal-window {
+  background-color: white;
+  border-radius: 10px;
+  border-width: 2px;
+  border-color: $darkBlue;
+}
+
+.login {
+  width: max(50vw, 400px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  .title {
+    display: flex;
+
+    h3 {
+      background-color: $lightBlue;
+      @include header-small;
+      color: white;
+      padding: 0 10px;
+      margin: 10px;
+    }
+  }
+
+  .email,
+  .password {
+    display: flex;
+    margin: 10px 0;
+
+    label {
+      text-align: right;
+      flex-basis: 172px;
+    }
+
+    input {
+      flex-grow: 2;
+      margin: 0 10px;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px;
+
+    button {
+      font-family: "heebo-bold";
+      border-radius: 10px;
+      margin-left: 20px;
+    }
+
+    .create {
+      background: $mutedRed;
+      color: $brightRed;
+    }
+
+    .submit {
+      background: $brightRed;
+      color: white;
+    }
+  }
+}
+
+.login-input {
+  label {
+    @include body;
+  }
+
+  input {
+    @include body;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom-width: 2px;
+    border-color: black;
+    color: $lightBlue;
+  }
+
+  input:focus {
+    outline: none;
+  }
+}

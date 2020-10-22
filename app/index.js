@@ -8,6 +8,10 @@ import Footer from "./components/Footer"
 import Home from "./pages/Home"
 import Info from "./pages/Info"
 import About from "./pages/About"
+import Contact from "./pages/Contact"
+import Members from "./pages/Members"
+
+import Login from "./components/Login"
 
 
 function App() {
@@ -33,7 +37,9 @@ function App() {
               alignment="right"
             />
           </Route>
-          <Route exact path="/about" component={About}/>
+          <Route exact path="/about" component={About} />
+          <Route exact path="/contact" component={Contact} />
+          <Route exact path="/members" component={Members} />
           <Route render={() => (
             <div id="fourohfour">
               <h1>Uh oh! Looks like you've reached a 404. Try again.</h1>
@@ -50,6 +56,6 @@ function App() {
 
 // Takes two params -> 1) element to render 2) where to render the element
 ReactDOM.render(
-  <App />,
+  <Login />,
   document.getElementById("app")
 )
