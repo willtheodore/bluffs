@@ -1,6 +1,9 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
 import VerticalLine from "../vectors/VerticalLine"
+import Login from "../components/Login"
+import AuthContext from "../contexts/auth"
+import { signOut } from "../utils/authentication"
 
 const activeStyle = {
   textDecoration: "underline",
@@ -8,43 +11,63 @@ const activeStyle = {
 }
 
 export default function Nav() {
-  return (
-    <nav>
-      <div className="logotype">
-        <NavLink to="/">Bedford Bluffs</NavLink>
-        <VerticalLine />
-      </div>
+  const [loginShowing, setLoginShowing] = React.useState(false)
+  const user = React.useContext(AuthContext)
 
-      <ul>
-        <NavLink
-          activeStyle={activeStyle}
-          to="/swim">
-          <p>Swim</p>
-        </NavLink>
-        <NavLink
-          activeStyle={activeStyle}
-          to="/tennis/">
-          <p>Tennis</p>
-        </NavLink>
-        <NavLink
-          activeStyle={activeStyle}
-          to="/about/">
-          <p>About</p>
-        </NavLink>
-        <NavLink
-          activeStyle={activeStyle}
-          to="/contact/">
-          <p>Contact</p>
-        </NavLink>
-        <NavLink
-          activeStyle={activeStyle}
-          to="/members/">
-          <p>Members</p>
-        </NavLink>
-        <button className="btn">
-          Login
-        </button>
-      </ul>
-    </nav>
+  const handleLoginHit = () => {
+    if (user === null) {
+      setLoginShowing(true)
+    } else {
+      signOut()
+    }
+  }
+
+  const dismiss = () => {
+    setLoginShowing(false)
+  }
+
+  return (
+    <React.Fragment>
+      {loginShowing && <Login dismiss={dismiss}/>}
+      <nav>
+        <div className="logotype">
+          <NavLink to="/">Bedford Bluffs</NavLink>
+          <VerticalLine />
+        </div>
+
+        <ul>
+          <NavLink
+            activeStyle={activeStyle}
+            to="/swim">
+            <p>Swim</p>
+          </NavLink>
+          <NavLink
+            activeStyle={activeStyle}
+            to="/tennis/">
+            <p>Tennis</p>
+          </NavLink>
+          <NavLink
+            activeStyle={activeStyle}
+            to="/about/">
+            <p>About</p>
+          </NavLink>
+          <NavLink
+            activeStyle={activeStyle}
+            to="/contact/">
+            <p>Contact</p>
+          </NavLink>
+          <NavLink
+            activeStyle={activeStyle}
+            to="/members/">
+            <p>Members</p>
+          </NavLink>
+          <button
+            onClick={handleLoginHit}
+            className="btn">
+            {user === null ? "LOGIN" : "SIGN OUT"}
+          </button>
+        </ul>
+      </nav>
+    </React.Fragment>
   )
 }

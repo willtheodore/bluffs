@@ -20,11 +20,26 @@
   }
 }
 
+.modal-bg {
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.37);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
 .modal-window {
   background-color: white;
   border-radius: 10px;
   border-width: 2px;
   border-color: $darkBlue;
+  border-style: solid;
+  position: fixed;
+  top: 250px;
+  left: calc(50% - calc(max(50vw, 400px) / 2));
+  z-index: 101;
 }
 
 .login {
@@ -32,6 +47,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  z-index: 101;
 
   .title {
     display: flex;
@@ -96,7 +112,6 @@
     border-right: none;
     border-bottom-width: 2px;
     border-color: black;
-    color: $lightBlue;
   }
 
   input:focus {

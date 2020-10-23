@@ -14,7 +14,7 @@ export default function Contact() {
         <div className="name line-input">
           <label
             htmlFor="contact-name"
-            className="bold-label">FULL NAME
+            className="bold-label">YOUR FULL NAME
           </label>
           <input
             type="text"
@@ -25,7 +25,7 @@ export default function Contact() {
           <label
             htmlFor="contact-name"
             className="bold-label">
-            EMAIL
+            YOUR EMAIL
           </label>
           <input
             type="text"
