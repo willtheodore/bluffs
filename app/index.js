@@ -51,7 +51,7 @@ function App() {
             </Route>
             <Route exact path="/about" component={About} />
             <Route exact path="/contact" component={Contact} />
-            <Route exact path="/members" component={Members} />
+            <Route path="/members" component={Members} />
             <Route render={() => (
               <div id="fourohfour">
                 <h1>Uh oh! Looks like you've reached a 404. Try again.</h1>

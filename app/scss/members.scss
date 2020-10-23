@@ -23,9 +23,40 @@
 #member-center {
   margin-top: 100px;
   margin-left: 20px;
+  display: flex;
+  flex-direction: column;
 
   h1 {
     @include header-large;
     color: white;
+  }
+
+  .sidebar {
+    background-color: $mutedYellow;
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    border-radius: 10px;
+
+    .sidebar-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 5px;
+
+      a,
+      svg {
+        margin: 0 10px;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      a {
+        @include body;
+        flex-grow: 1;
+      }
+    }
   }
 }
