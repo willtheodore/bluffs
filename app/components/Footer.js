@@ -6,16 +6,17 @@ export default function Footer() {
     <div id="footer">
       <ul>
         <NavLink
-          to="./about" >
+          to="/about" >
           About
         </NavLink>
         <NavLink
-          to="./contact" >
+          to="/contact" >
           Contact
         </NavLink>
-        <button className="btn clear">
-          Login
-        </button>
+        <NavLink
+          to="/members" >
+          Members
+        </NavLink>
       </ul>
       <p>©Bedford Bluffs</p>
     </div>

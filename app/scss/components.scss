@@ -51,6 +51,7 @@
 
   .title {
     display: flex;
+    flex-direction: row;
 
     h3 {
       background-color: $lightBlue;
@@ -59,21 +60,12 @@
       padding: 0 10px;
       margin: 10px;
     }
-  }
 
-  .email,
-  .password {
-    display: flex;
-    margin: 10px 0;
-
-    label {
-      text-align: right;
-      flex-basis: 172px;
-    }
-
-    input {
-      flex-grow: 2;
-      margin: 0 10px;
+    .error {
+      color: $brightRed;
+      margin: 10px;
+      font-family: "heebo-light";
+      font-size: 14px;
     }
   }
 
@@ -81,31 +73,38 @@
     display: flex;
     justify-content: flex-end;
     margin: 10px;
-
-    button {
-      font-family: "heebo-bold";
-      border-radius: 10px;
-      margin-left: 20px;
-    }
-
-    .create {
-      background: $mutedRed;
-      color: $brightRed;
-    }
-
-    .submit {
-      background: $brightRed;
-      color: white;
-    }
   }
 }
 
-.login-input {
+.btn-bold-red {
+  font-family: "heebo-bold";
+  border-radius: 10px;
+  margin-left: 20px;
+  background: $brightRed;
+  color: white;
+}
+
+.btn-bold-muted {
+  font-family: "heebo-bold";
+  border-radius: 10px;
+  margin-left: 20px;
+  background: $mutedRed;
+  color: $brightRed;
+}
+
+.form-input {
+  display: flex;
+  margin: 10px 0;
+
   label {
+    text-align: right;
+    flex-basis: 172px;
     @include body;
   }
 
   input {
+    flex-grow: 2;
+    margin: 0 10px;
     @include body;
     border-top: none;
     border-left: none;

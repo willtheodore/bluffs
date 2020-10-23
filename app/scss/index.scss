@@ -62,7 +62,7 @@ ul {
 
 .btn {
   border-radius: 4px;
-  @include body;
+  font-size: 18px;
   border: none;
   padding: 5px 15px;
 }
@@ -121,6 +121,7 @@ nav {
     button {
       background-color: white;
       color: black;
+      font-family: "heebo-medium";
     }
   }
 }

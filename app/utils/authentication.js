@@ -22,56 +22,108 @@ function checkCharacters(validChars, string) {
 }
 
 export function signOut() {
-  firebase.auth().signOut()
-  console.log("NOT DONE")
+  return new Promise((resolve, reject) =>  {
+    firebase.auth().signOut()
+    .then(() => resolve("success signing out"))
+    .catch(err => {
+      console.log("Error signing out: ", err.message)
+      reject(err)
+    })
+  })
 }
 
 export function signInUser(email, password) {
   return new Promise((resolve, reject) => {
     firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(() => resolve("success"))
+    .then(() => resolve("success signing in"))
     .catch(err => {
-      console.log(err.message)
+      console.log("Error signing in: ", err.message)
       reject(err.message)
     })
   })
 }
 
+export function createAccount(email, password) {
+  return new Promise((resolve, reject) => {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(() => resolve("Success signing in user"))
+    .catch(err => {
+      console.log("Error creating account: ", err.message)
+      reject(err.message)
+    })
+  })
+}
+
+export function addName(firstName, lastName) {
+  return new Promise((resolve, reject) => {
+    const user = firebase.auth().currentUser
+
+    user.updateProfile({
+      displayName: `${firstName} ${lastName}`
+    })
+    .then(() => resolve("Name update successful"))
+    .catch(() => reject("Error adding name to profile."))
+  })
+}
+
 export function validateEmail(email) {
-  // check for @ sign
-  const breakIndex = email.indexOf("@")
-  if (breakIndex === -1) { return false }
+  return new Promise((resolve, reject) => {
+    // check for @ sign
+    const breakIndex = email.indexOf("@")
+    if (breakIndex === -1) { reject("No @ sign in email") }
 
-  // check for valid recipient name
-  const name = email.slice(0, breakIndex)
-  if (!checkCharacters(expandedChars, name)) { return false }
+    // check for valid recipient name
+    const name = email.slice(0, breakIndex)
+    if (name.length < 1) { reject("Invalid email") }
+    if (!checkCharacters(expandedChars, name)) { reject("Invalid email") }
 
-  // check for . in suffix
-  const suffix = email.slice(breakIndex + 1)
-  const dotIndex = suffix.indexOf(".")
-  if (dotIndex === -1) { return false }
+    // check for . in suffix
+    const suffix = email.slice(breakIndex + 1)
+    const dotIndex = suffix.indexOf(".")
+    if (suffix.length < 1) { reject("Invalid email") }
+    if (dotIndex === -1) { reject("Invalid email") }
 
-  // check for valid domain (pre extension)
-  const domain = suffix.slice(0, dotIndex)
-  if (!checkCharacters(narrowChars, domain)) { return false }
+    // check for valid domain (pre extension)
+    const domain = suffix.slice(0, dotIndex)
+    if (domain.length < 1) { reject("Invalid email") }
+    if (!checkCharacters(narrowChars, domain)) { reject("Invalid email") }
 
-  // check for valid extension
-  const validExtensions = ["com", "net", "org", "co", "uk"]
-  const ext = suffix.slice(dotIndex + 1)
-  const match = validExtensions.find(element => element === ext)
-  if (match === undefined) { return false }
+    // check for valid extension
+    const validExtensions = ["com", "net", "org", "co", "uk"]
+    const ext = suffix.slice(dotIndex + 1)
+    const match = validExtensions.find(element => element === ext)
+    if (match === undefined) { reject("Invalid email") }
 
-  return true
+    resolve("Valid Email")
+  })
 }
 
 export function validatePassword(password) {
-  const length = password.length
+  return new Promise((resolve, reject) => {
+    const length = password.length
 
-  // check for invalid characters
-  if (!checkCharacters(expandedChars, password)) { return false }
+    // check for invalid characters
+    if (!checkCharacters(expandedChars, password)) { reject("Invalid characters in password") }
 
-  // check for proper length
-  if (length < 8 || length > 20) { return false }
+    // check for proper length
+    if (length < 8 || length > 20) { reject("Password must be between 8 and 20 characters in length") }
 
-  return true
+    resolve("Valid Password")
+  })
+}
+
+export function confirmNotEmpty(array) {
+  return new Promise((resolve, reject) => {
+    for (let i = 0; i < array.length; i++) {
+      if (array[i].length < 1 || array[i] === null || array[i] === undefined) { reject("All fields are required.") }
+    }
+    resolve("All fields are filled")
+  })
+}
+
+export function confirmMatch(field1, field2, type) {
+  return new Promise((resolve, reject) => {
+    if (field1 === field2) { resolve("match confirmed") }
+    else { reject(`${type} fields did not match`)}
+  })
 }
