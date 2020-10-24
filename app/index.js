@@ -36,7 +36,7 @@ function App() {
           width: "100%",
           height: "100%",
           backgroundColor: "blue",
-          color: "white",
+          color: "#1E2562",
           position: "absolute",
           top: "50%",
           left: "20%"
