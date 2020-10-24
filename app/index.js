@@ -7,11 +7,11 @@ import firebase from "./firebase"
 
 import Nav from "./components/Nav"
 import Footer from "./components/Footer"
-import Home from "./pages/Home"
-import Info from "./pages/Info"
-import About from "./pages/About"
-import Contact from "./pages/Contact"
-import Members from "./pages/Members"
+const Home = React.lazy(() => import("./pages/Home"))
+const Info = React.lazy(() => import("./pages/Info"))
+const About = React.lazy(() => import("./pages/About"))
+const Contact = React.lazy(() => import("./pages/Contact"))
+const Members = React.lazy(() => import("./pages/Members"))
 
 
 function App() {
@@ -32,7 +32,15 @@ function App() {
   return (
     <Router>
       <AuthProvider value={user}>
-        <React.Suspense fallback={<Home />}>
+        <React.Suspense fallback={<h3 style={{
+          width: "100%",
+          height: "100%",
+          backgroundColor: "blue",
+          color: "white",
+          position: "absolute",
+          top: "50%",
+          left: "20%"
+        }}>One moment please!</h3>}>
         <div className="container">
           <Nav />
           <Switch>
@@ -66,8 +74,6 @@ function App() {
   )
 }
 
-
-// Takes two params -> 1) element to render 2) where to render the element
 ReactDOM.render(
   <App />,
   document.getElementById("app")
