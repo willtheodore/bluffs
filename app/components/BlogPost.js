@@ -1,8 +1,9 @@
 import React from "react"
+import { Link } from "react-router-dom"
 
 import { formatDateForDescription } from "../utils/formatters"
 
-export default function BlogPost({ title, date, authorName, content, charLimit = null}) {
+export default function BlogPost({ title, date, authorName, content, charLimit = null, postId = null}) {
   const styles = {
     container: {
       backgroundColor: "white",
@@ -49,14 +50,28 @@ export default function BlogPost({ title, date, authorName, content, charLimit =
     newContent = newContent.concat(" ...")
   }
 
+  const innerContent = () => {
+    return (
+      <React.Fragment>
+        <h2 style={styles.header}>{title}</h2>
+        <p style={styles.description}>
+          {`by ${authorName} // posted ${date}`}
+        </p>
+        <hr style={styles.hr}/>
+        <p style={styles.content} dangerouslySetInnerHTML={{__html: newContent}} />
+      </React.Fragment>
+    )
+  }
+
+  if (postId) return (
+    <Link style={styles.container} to={`/members/postDetail?postId=${postId}`}>
+      {innerContent()}
+    </Link>
+  )
+
   return (
     <div style={styles.container}>
-      <h2 style={styles.header}>{title}</h2>
-      <p style={styles.description}>
-        {`by ${authorName} // posted ${date}`}
-      </p>
-      <hr style={styles.hr}/>
-      <p style={styles.content} dangerouslySetInnerHTML={{__html: newContent}} />
+      {innerContent()}
     </div>
   )
 }

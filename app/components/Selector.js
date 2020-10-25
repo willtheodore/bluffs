@@ -16,6 +16,7 @@ export default function Selector({ color = "#FFFFF3",
                                    title = null,
                                    fontSize = "18px",
                                    preSelected = null,
+                                   icons = null,
                                    items,
                                    setState}) {
   const [selected, setSelected] = React.useState(null)
@@ -62,7 +63,9 @@ export default function Selector({ color = "#FFFFF3",
       textAlign: "center",
       fontSize: fontSize,
       fontFamily: "heebo-light",
-      display: "block",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
       padding: "10px 0",
     },
     active: {
@@ -89,6 +92,12 @@ export default function Selector({ color = "#FFFFF3",
           }
           return (
           <li className="pointer" key={index} style={itemStyle} onClick={() => setSelected(item)}>
+            {icons != null && (
+              <React.Fragment>
+                {icons[index]}
+                <div style={{width: "10px", display: "inline"}}></div>
+              </React.Fragment>
+            )}
             {item}
           </li>
         )})}

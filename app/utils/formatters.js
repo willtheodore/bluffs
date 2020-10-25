@@ -13,6 +13,28 @@ export function formatDateForDescription(date) {
   }
 }
 
+export function parsePath(location) {
+  if (location) {
+    const path = location.pathname
+    let stringBuild = ""
+    let tokens = []
+    for (let i = 0; i < path.length; i++) {
+      if (path.charAt(i) == "/") {
+        if (stringBuild != "") {
+          tokens.push(stringBuild)
+        }
+        stringBuild = ""
+      } else {
+        stringBuild = stringBuild.concat(path.charAt(i))
+      }
+    }
+    if (stringBuild != "") {
+      tokens.push(stringBuild)
+    }
+    return tokens
+  }
+}
+
 function parseMinutes(minutes) {
   if (minutes < 10) { return `0${minutes}` }
   else { return minutes }

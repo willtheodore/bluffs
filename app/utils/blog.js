@@ -44,6 +44,22 @@ export function formatPosts(posts) {
   return result
 }
 
+export function addNewPost(uid, displayName, timestamp, title, content) {
+  return new Promise((resolve, reject) => {
+    firestore.collection("posts").add({
+      author: uid,
+      authorName: displayName,
+      title: title,
+      content: content,
+      datePosted: timestamp,
+      month: timestamp.getMonth(),
+      year: timestamp.getYear(),
+    })
+    .then(docRef => resolve(docRef))
+    .catch(err => reject(err.message))
+  })
+}
+
 // Returns a promise containing all matching posts in a given month and year. A rejected result contains
 // the error.
 export function getPostsByDate(month, year) {

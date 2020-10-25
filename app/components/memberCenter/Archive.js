@@ -22,7 +22,6 @@ export default function Archive() {
       })
       .catch(err => setError(err))
     }
-    console.log(posts)
   }, [month, year])
 
   return (
@@ -47,7 +46,8 @@ export default function Archive() {
                 authorName={post.authorName}
                 date={post.formattedDate}
                 content={post.content}
-                charLimit={500} />
+                charLimit={500}
+                postId={post.postId} />
             </li>
           ))}
         </ul>

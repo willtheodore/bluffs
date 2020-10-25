@@ -3,8 +3,9 @@ import useHover from "../hooks/useHover"
 
 import { validateEmail, validatePassword, signInUser, createAccount, confirmMatch, confirmNotEmpty, addName } from "../utils/authentication"
 
-function FormInput({ setValue, style = null, labelText, type = "text" }) {
-  return (
+export function FormInput({ setValue = null, style = null, labelText, type = "text", reference = null }) {
+
+  if (setValue) return (
     <div className="form-input">
       <label
         htmlFor={labelText}>
@@ -15,6 +16,20 @@ function FormInput({ setValue, style = null, labelText, type = "text" }) {
         type={type}
         id={labelText}
         onChange={setValue} />
+    </div>
+  )
+
+  return (
+    <div className="form-input">
+      <label
+        htmlFor={labelText}>
+        {labelText}
+      </label>
+      <input
+        style={style}
+        type={type}
+        id={labelText}
+        ref={reference} />
     </div>
   )
 }
@@ -31,7 +46,7 @@ function LoginContent({ setMode, dismiss }) {
     return () => {
       document.removeEventListener('keydown', handleKeydown)
     }
-  }, [email, password])
+  }, [])
 
   React.useEffect(() => {
     if (email.length < 1) { setEmailStyle({ color: "black" }) }

@@ -1,6 +1,7 @@
 import React from "react"
 import AuthContext from "../contexts/auth"
-import { Switch, Route, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
+import { parsePath } from "../utils/formatters"
 
 const RecentPosts = React.lazy(() => import("../components/memberCenter/RecentPosts"))
 const Archive = React.lazy(() => import("../components/memberCenter/Archive"))
@@ -8,6 +9,7 @@ const Calendar = React.lazy(() => import("../components/memberCenter/Calendar"))
 const SignUps = React.lazy(() => import("../components/memberCenter/SignUps"))
 const Account = React.lazy(() => import("../components/memberCenter/Account"))
 const Admin = React.lazy(() => import("../components/memberCenter/Admin"))
+const PostDetail = React.lazy(() => import("../components/memberCenter/PostDetail"))
 import Sidebar from "../components/memberCenter/Sidebar"
 import Header from "../components/Header"
 
@@ -15,6 +17,7 @@ export default function Members() {
   const user = React.useContext(AuthContext)
   const [posts, setPosts] = React.useState(null)
   const location = useLocation()
+  const pathElements = parsePath(location)
 
   if (user === null) {
     return (
@@ -41,14 +44,12 @@ export default function Members() {
           top: "50%",
           left: "20%"
         }}></div>}>
-          <Switch>
-            <Route exact path="/members/recent" component={RecentPosts} />
-            <Route exact path="/members/archive" component={Archive} />
-            <Route exact path="/members/calendar" component={Calendar} />
-            <Route exact path="/members/signups" component={SignUps} />
-            <Route exact path="/members/account" component={Account} />
-            <Route exact path="/members/admin" component={Admin} />
-          </Switch>
+          {(pathElements[1] === "recent" || !pathElements[1] ) && <RecentPosts />}
+          {pathElements[1] === "archive" && <Archive />}
+          {pathElements[1] === "calendar" && <Calendar />}
+          {pathElements[1] === "signups" && <SignUps />}
+          {pathElements[1] === "account" && <Account />}
+          {pathElements[1] === "admin" && <Admin />}
         </React.Suspense>
       </div>
     </div>
