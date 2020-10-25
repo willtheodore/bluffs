@@ -2,12 +2,12 @@ import React from "react"
 import AuthContext from "../contexts/auth"
 import { Switch, Route, useLocation } from "react-router-dom"
 
-import RecentPosts from "../components/memberCenter/RecentPosts"
-import Archive from "../components/memberCenter/Archive"
-import Calendar from "../components/memberCenter/Calendar"
-import SignUps from "../components/memberCenter/SignUps"
-import Account from "../components/memberCenter/Account"
-import Admin from "../components/memberCenter/Admin"
+const RecentPosts = React.lazy(() => import("../components/memberCenter/RecentPosts"))
+const Archive = React.lazy(() => import("../components/memberCenter/Archive"))
+const Calendar = React.lazy(() => import("../components/memberCenter/Calendar"))
+const SignUps = React.lazy(() => import("../components/memberCenter/SignUps"))
+const Account = React.lazy(() => import("../components/memberCenter/Account"))
+const Admin = React.lazy(() => import("../components/memberCenter/Admin"))
 import Sidebar from "../components/memberCenter/Sidebar"
 import Header from "../components/Header"
 
@@ -30,16 +30,26 @@ export default function Members() {
   return (
     <div id="member-center">
       <h1>Member Center</h1>
-      <div>
+      <div id="center-flow">
         <Sidebar />
-        <Switch>
-          <Route exact path="/members/recent" component={RecentPosts} />
-          <Route exact path="/members/archive" component={Archive} />
-          <Route exact path="/members/calendar" component={Calendar} />
-          <Route exact path="/members/signups" component={SignUps} />
-          <Route exact path="/members/account" component={Account} />
-          <Route exact path="/members/admin" component={Admin} />
-        </Switch>
+        <React.Suspense fallback={<div style={{
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#1E2562",
+          color: "white",
+          position: "absolute",
+          top: "50%",
+          left: "20%"
+        }}></div>}>
+          <Switch>
+            <Route exact path="/members/recent" component={RecentPosts} />
+            <Route exact path="/members/archive" component={Archive} />
+            <Route exact path="/members/calendar" component={Calendar} />
+            <Route exact path="/members/signups" component={SignUps} />
+            <Route exact path="/members/account" component={Account} />
+            <Route exact path="/members/admin" component={Admin} />
+          </Switch>
+        </React.Suspense>
       </div>
     </div>
   )

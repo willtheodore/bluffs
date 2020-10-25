@@ -13,7 +13,6 @@ const About = React.lazy(() => import("./pages/About"))
 const Contact = React.lazy(() => import("./pages/Contact"))
 const Members = React.lazy(() => import("./pages/Members"))
 
-
 function App() {
   const [theme, setTheme] = React.useState("light")
   const [user, setUser] = React.useState(null)
@@ -32,15 +31,15 @@ function App() {
   return (
     <Router>
       <AuthProvider value={user}>
-        <React.Suspense fallback={<h3 style={{
+        <React.Suspense fallback={<div style={{
           width: "100%",
           height: "100%",
-          backgroundColor: "blue",
+          backgroundColor: "#1E2562",
           color: "white",
           position: "absolute",
           top: "50%",
           left: "20%"
-        }}>One moment please!</h3>}>
+        }}></div>}>
         <div className="container">
           <Nav />
           <Switch>

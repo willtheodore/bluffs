@@ -3,7 +3,7 @@ import useHover from "../hooks/useHover"
 
 import { validateEmail, validatePassword, signInUser, createAccount, confirmMatch, confirmNotEmpty, addName } from "../utils/authentication"
 
-function FormInput({ reference, style = null, labelText, type = "text" }) {
+function FormInput({ setValue, style = null, labelText, type = "text" }) {
   return (
     <div className="form-input">
       <label
@@ -14,44 +14,49 @@ function FormInput({ reference, style = null, labelText, type = "text" }) {
         style={style}
         type={type}
         id={labelText}
-        ref={reference} />
+        onChange={setValue} />
     </div>
   )
 }
 
 function LoginContent({ setMode, dismiss }) {
-  const email = React.useRef("")
-  const password = React.useRef("")
-  const [error, setError] = React.useState(null)
+  const [email, setEmail] = React.useState("")
+  const [password, setPassword] = React.useState("")
   const [emailStyle, setEmailStyle] = React.useState({ color: "black" })
   const [passwordStyle, setPasswordStyle] = React.useState({ color: "black" })
+  const [error, setError] = React.useState(null)
 
   React.useEffect(() => {
-    const eVal = email.current.value
-    const pVal = password.current.value
+    document.addEventListener('keydown', handleKeydown)
+    return () => {
+      document.removeEventListener('keydown', handleKeydown)
+    }
+  }, [email, password])
 
-    if (eVal.length < 1) { setEmailStyle({ color: "black" }) }
-    if (pVal.length < 1) { setPasswordStyle({ color: "black" }) }
+  React.useEffect(() => {
+    if (email.length < 1) { setEmailStyle({ color: "black" }) }
+    if (password.length < 1) { setPasswordStyle({ color: "black" }) }
 
-    validateEmail(eVal)
+    validateEmail(email)
     .then(res => setEmailStyle({ color: "green" }))
     .catch(err => {
       setEmailStyle({ color: "red" })
     })
-    validatePassword(pVal)
+    validatePassword(password)
     .then(res => setPasswordStyle({ color: "green" }))
     .catch(err => {
       setPasswordStyle({ color: "red" })
     })
-  }, [email.current.value, password.current.value])
+  }, [email, password])
+
+  const handleKeydown = e => {
+    if (e.code === "Enter") { handleSubmit() }
+  }
 
   const handleSubmit = () => {
-    const eVal = email.current.value
-    const pVal = password.current.value
-
-    validateEmail(eVal)
-    .then(() => validatePassword(pVal))
-    .then(() => signInUser(eVal, pVal))
+    validateEmail(email)
+    .then(() => validatePassword(password))
+    .then(() => signInUser(email, password))
     .then(() => dismiss())
     .catch(err => setError(err))
   }
@@ -63,12 +68,12 @@ function LoginContent({ setMode, dismiss }) {
         <p className="error">{error}</p>
       </div>
       <FormInput
-        reference={email}
+        setValue={e => setEmail(e.target.value)}
         labelText="email"
         style={emailStyle}
       />
       <FormInput
-        reference={password}
+        setValue={e => setPassword(e.target.value)}
         labelText="password"
         style={passwordStyle}
         type="password"

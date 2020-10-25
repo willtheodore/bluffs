@@ -31,12 +31,20 @@
     color: white;
   }
 
+  .sidebar-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
   .sidebar {
     background-color: $mutedYellow;
     display: flex;
     flex-direction: column;
     width: 250px;
     border-radius: 10px;
+    padding-top: 5px;
+    overflow: hidden;
 
     .sidebar-item {
       display: flex;
@@ -57,6 +65,45 @@
         @include body;
         flex-grow: 1;
       }
+    }
+  }
+
+  #center-flow {
+    display: flex;
+    flex-direction: row;
+
+    #recent-posts {
+      height: 100%;
+      width: 100%;
+    }
+
+    #archive {
+      height: 100%;
+      width: 100%;
+
+      .selector {
+        margin: 0 20px 10px;
+      }
+    }
+
+    #calendar {
+      height: 100%;
+      width: 100%;
+    }
+
+    #sign-ups {
+      height: 100%;
+      width: 100%;
+    }
+
+    #account {
+      height: 100%;
+      width: 100%;
+    }
+
+    #admin {
+      height: 100%;
+      width: 100%;
     }
   }
 }

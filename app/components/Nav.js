@@ -13,6 +13,15 @@ const activeStyle = {
 export default function Nav() {
   const [loginShowing, setLoginShowing] = React.useState(false)
   const user = React.useContext(AuthContext)
+  const [membersPath, setMembersPath] = React.useState("/members/")
+
+  React.useEffect(() => {
+    if (user != null) {
+      setMembersPath("/members/recent")
+    } else {
+      setMembersPath("/members")
+    }
+  }, [user])
 
   const handleLoginHit = () => {
     if (user === null) {
@@ -58,13 +67,13 @@ export default function Nav() {
           </NavLink>
           <NavLink
             activeStyle={activeStyle}
-            to="/members/">
+            to={membersPath}>
             <p>Members</p>
           </NavLink>
           <button
             onClick={handleLoginHit}
             className="btn">
-            {user === null ? "LOGIN" : "SIGN OUT"}
+            {user === null ? "Login" : "Sign Out"}
           </button>
         </ul>
       </nav>
