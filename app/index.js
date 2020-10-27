@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import "./scss/index.scss"
 import { AuthProvider } from "./contexts/auth"
 import firebase from "./firebase"
+import { determineIfAdmin, getAdmins } from "./utils/users"
 
 import Nav from "./components/Nav"
 import Footer from "./components/Footer"
@@ -19,9 +20,16 @@ function App() {
   const toggleTheme = () => setTheme((theme) => theme === "light" ? "dark" : "light")
 
   React.useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        setUser(user)
+    firebase.auth().onAuthStateChanged(userObj => {
+      let isAdmin;
+      if (userObj) {
+        getAdmins()
+        .then(admins => isAdmin = determineIfAdmin(userObj, admins))
+        .then(() => setUser({
+          isAdmin: isAdmin,
+          ...userObj
+        }))
+        .catch(err => console.log(err))
       } else {
         setUser(null)
       }

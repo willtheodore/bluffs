@@ -69,16 +69,17 @@ export function addName(firstName, lastName) {
 export function validateEmail(email) {
   return new Promise((resolve, reject) => {
     // check for @ sign
-    const breakIndex = email.indexOf("@")
+    const eVal = email.slice()
+    const breakIndex = eVal.indexOf("@")
     if (breakIndex === -1) { reject("No @ sign in email") }
 
     // check for valid recipient name
-    const name = email.slice(0, breakIndex)
+    const name = eVal.slice(0, breakIndex)
     if (name.length < 1) { reject("Invalid email") }
     if (!checkCharacters(expandedChars, name)) { reject("Invalid email") }
 
     // check for . in suffix
-    const suffix = email.slice(breakIndex + 1)
+    const suffix = eVal.slice(breakIndex + 1)
     const dotIndex = suffix.indexOf(".")
     if (suffix.length < 1) { reject("Invalid email") }
     if (dotIndex === -1) { reject("Invalid email") }

@@ -24,6 +24,7 @@ export default function RecentPosts() {
                 authorName={post.authorName}
                 date={post.formattedDate}
                 content={post.content}
+                postId={post.postId}
               />
             </li>
           ))}

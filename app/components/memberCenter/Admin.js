@@ -1,5 +1,5 @@
 import React from "react"
-import { FaPencilAlt } from "react-icons/fa"
+import { FaPencilAlt, FaLock } from "react-icons/fa"
 import AuthContext from "../../contexts/auth"
 import { addNewPost } from "../../utils/blog"
 
@@ -12,11 +12,20 @@ export default function Admin() {
   return (
     <div id="admin">
       <Selector
-        icons={[ <FaPencilAlt /> ]}
-        items={["Create Post"]}
+        icons={[ <FaPencilAlt />, <FaLock /> ]}
+        items={["Create Post", "Manage Admins"]}
         setState={setSelectedMode}
       />
       {selectedMode === "Create Post" && <CreatePost />}
+      {selectedMode === "Manage Admins" && <ManageAdmins />}
+    </div>
+  )
+}
+
+function ManageAdmins() {
+  return (
+    <div>
+      Manage Admins
     </div>
   )
 }

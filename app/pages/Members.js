@@ -34,10 +34,10 @@ export default function Members() {
     <div id="member-center">
       <h1>Member Center</h1>
       <div id="center-flow">
-        <Sidebar />
+        <Sidebar isAdmin={user.isAdmin}/>
         <React.Suspense fallback={<div style={{
           width: "100%",
-          height: "100%",
+          height: "60px",
           backgroundColor: "#1E2562",
           color: "white",
           position: "absolute",
@@ -50,6 +50,7 @@ export default function Members() {
           {pathElements[1] === "signups" && <SignUps />}
           {pathElements[1] === "account" && <Account />}
           {pathElements[1] === "admin" && <Admin />}
+          {pathElements[1] === "postDetail" && <PostDetail />}
         </React.Suspense>
       </div>
     </div>

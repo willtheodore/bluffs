@@ -13,6 +13,19 @@ export function formatDateForDescription(date) {
   }
 }
 
+export function formatComment(comment) {
+  if (comment) {
+    const date = comment.datePosted
+    const formattedDate = formatDateForDescription(date)
+    return {
+      formattedDate: formattedDate,
+      ...comment
+    }
+  } else {
+    return null
+  }
+}
+
 export function parsePath(location) {
   if (location) {
     const path = location.pathname
@@ -33,6 +46,62 @@ export function parsePath(location) {
     }
     return tokens
   }
+  return null
+}
+
+export function parseSearch(location) {
+  if (location && location.search) {
+    const search = location.search
+    let param = ""
+    let value = ""
+    let result = {}
+
+    for (let i = 0; i < search.length; i++) {
+      const char = search.charAt(i)
+      const paramEmpty = param.length === 0
+      const valueEmpty = value.length === 0
+
+      switch (char) {
+        case "?":
+          if (!paramEmpty || !valueEmpty) {
+            console.log("Returning null from parseSearch: unexpected token '?'")
+            return null
+          }
+          break;
+        case "=":
+          if (!paramEmpty && valueEmpty) {
+              result.[param] = true
+          } else {
+            console.log("Returning null from parseSearch: unexpected token '='")
+            return null
+          }
+          break;
+        case "&":
+          if (result.[param] && !valueEmpty) {
+            result.[param] = value
+            param = ""
+            value = ""
+          } else {
+            console.log("Returning null from parseSearch: unexpected token '&'")
+            return null
+          }
+          break;
+        default:
+          if (result.[param]) {
+            value = value.concat(char)
+          } else if (valueEmpty) {
+            param = param.concat(char)
+          } else {
+            console.log("Returning null from parseSearch: value with no param")
+          }
+      }
+    }
+    if (result.[param]) {
+      result.[param] = value
+    }
+    return result
+  }
+  return null
 }
 
 function parseMinutes(minutes) {

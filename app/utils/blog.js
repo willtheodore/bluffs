@@ -1,13 +1,11 @@
-import { firestore } from "../firebase"
+import firebase, { firestore } from "../firebase"
 import { formatDateForDescription } from "./formatters"
 
 // Returns a promise containing a JSON object containing the data for a single post document
 // that matches the document ID passed to the function. A rejected result contains the error.
 export function retrievePostById(id) {
   return new Promise((resolve, reject) => {
-    const posts = firestore.collection("posts")
-
-    posts.doc(id).get()
+    firestore.collection("posts").doc(id).get()
     .then(doc => {
       resolve(doc.data())
     })
@@ -16,6 +14,13 @@ export function retrievePostById(id) {
       reject(err)
     })
   })
+}
+
+export function setPostListenerById(id, handlePost) {
+  const unsubscribe = firestore.collection("posts").doc(id).onSnapshot(doc => {
+    handlePost(doc.data())
+  })
+  return unsubscribe
 }
 
 // Returns a promise containing an array of JSON objects where each object represents a recent post
@@ -27,8 +32,12 @@ export function getRecentPosts(number) {
 
     posts.orderBy("datePosted", "desc").limit(number).get()
     .then(posts => {
-      posts.forEach(doc => {
-        result.push(doc.data())
+      posts.forEach(post => {
+        const data = post.data()
+        result.push({
+          ...data,
+          postId: post.id
+        })
       })
       resolve(result)
     })
@@ -57,6 +66,37 @@ export function addNewPost(uid, displayName, timestamp, title, content) {
     })
     .then(docRef => resolve(docRef))
     .catch(err => reject(err.message))
+  })
+}
+
+export function postComment(postId, uid, displayName, timestamp, content, comments) {
+  return new Promise((resolve, reject) => {
+    const newCommentKey = timestamp.getTime().toString()
+    firestore.collection("posts").doc(postId).update({
+      comments: {
+        [newCommentKey]: {
+          "author": uid,
+          "authorName": displayName,
+          "datePosted": timestamp,
+          "content": content,
+        },
+        ...comments
+      }
+    })
+    .then(docRef => resolve(docRef))
+    .catch(err => reject(err.message))
+  })
+}
+
+export function deleteCommentById(postId, id, comments) {
+  return new Promise((resolve, reject) => {
+    let updates = { comments: null }
+    const oldCommentKey = `comments.${id}`
+    firestore.collection("posts").doc(postId).update({
+      [oldCommentKey]: firebase.firestore.FieldValue.delete()
+    })
+    .then(docRef => resolve(docRef))
+    .catch(err => reject(err.message0))
   })
 }
 

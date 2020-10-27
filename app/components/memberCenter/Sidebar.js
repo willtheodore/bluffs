@@ -3,7 +3,6 @@ import { FaChevronRight, FaNewspaper, FaBox, FaCalendarAlt, FaPenSquare, FaUserA
 import { Link, useLocation } from "react-router-dom"
 import AuthContext from "../../contexts/auth"
 
-
 function SidebarItem({ title, isActive, children, to }) {
   let style = {}
   if (isActive) {
@@ -24,9 +23,8 @@ function SidebarItem({ title, isActive, children, to }) {
   )
 }
 
-export default function Sidebar() {
+export default function Sidebar({ isAdmin }) {
   const user = React.useContext(AuthContext)
-  const isAdmin = true
   const path = useLocation().pathname
 
   return (

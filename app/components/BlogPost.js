@@ -50,28 +50,28 @@ export default function BlogPost({ title, date, authorName, content, charLimit =
     newContent = newContent.concat(" ...")
   }
 
-  const innerContent = () => {
-    return (
-      <React.Fragment>
+  const getHeader = () => {
+    if (postId) {
+      return (
+        <Link to={`/members/postDetail?postId=${postId}`}>
+          <h2 style={styles.header}>{title}</h2>
+        </Link>
+      )
+    } else {
+      return (
         <h2 style={styles.header}>{title}</h2>
-        <p style={styles.description}>
-          {`by ${authorName} // posted ${date}`}
-        </p>
-        <hr style={styles.hr}/>
-        <p style={styles.content} dangerouslySetInnerHTML={{__html: newContent}} />
-      </React.Fragment>
-    )
+      )
+    }
   }
-
-  if (postId) return (
-    <Link style={styles.container} to={`/members/postDetail?postId=${postId}`}>
-      {innerContent()}
-    </Link>
-  )
 
   return (
     <div style={styles.container}>
-      {innerContent()}
+      {getHeader()}
+      <p style={styles.description}>
+        {`by ${authorName} // posted ${date}`}
+      </p>
+      <hr style={styles.hr}/>
+      <p style={styles.content} dangerouslySetInnerHTML={{__html: newContent}} />
     </div>
   )
 }

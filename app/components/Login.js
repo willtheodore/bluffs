@@ -2,6 +2,7 @@ import React from "react"
 import useHover from "../hooks/useHover"
 
 import { validateEmail, validatePassword, signInUser, createAccount, confirmMatch, confirmNotEmpty, addName } from "../utils/authentication"
+import { addUserToFirestore } from "../utils/users"
 
 export function FormInput({ setValue = null, style = null, labelText, type = "text", reference = null }) {
 
@@ -42,13 +43,6 @@ function LoginContent({ setMode, dismiss }) {
   const [error, setError] = React.useState(null)
 
   React.useEffect(() => {
-    document.addEventListener('keydown', handleKeydown)
-    return () => {
-      document.removeEventListener('keydown', handleKeydown)
-    }
-  }, [])
-
-  React.useEffect(() => {
     if (email.length < 1) { setEmailStyle({ color: "black" }) }
     if (password.length < 1) { setPasswordStyle({ color: "black" }) }
 
@@ -63,10 +57,6 @@ function LoginContent({ setMode, dismiss }) {
       setPasswordStyle({ color: "red" })
     })
   }, [email, password])
-
-  const handleKeydown = e => {
-    if (e.code === "Enter") { handleSubmit() }
-  }
 
   const handleSubmit = () => {
     validateEmail(email)
@@ -131,6 +121,7 @@ function CreateContent({ setMode, dismiss }) {
     .then(() => validatePassword(pVal))
     .then(() => createAccount(eVal, pVal))
     .then(() => addName(firstVal, lastVal))
+    .then(() => addUserToFirestore(eVal, firstVal, lastVal))
     .then(() => dismiss())
     .catch(err => setError(err))
   }
