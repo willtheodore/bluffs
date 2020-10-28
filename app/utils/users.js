@@ -6,7 +6,56 @@ export function getUserById(id) {
 
     users.doc(id).get()
     .then(user => resolve(user.data()))
-    .catch(err => reject(err))
+    .catch(err => reject(err.message))
+  })
+}
+
+export function getUsersByIds(ids) {
+  const filterById = user => {
+    for (const id of ids) {
+      if (user.id === id) {
+        return true
+      }
+    }
+    return false
+  }
+
+  return new Promise((resolve, reject) => {
+    firestore.collection("users").get()
+    .then(users => {
+      let result = {}
+      users.forEach(user => {
+        if (filterById(user)) {
+          result = {
+            [user.id]: user.data(),
+            ...result
+          }
+        }
+      })
+      resolve(result)
+    })
+    .catch(err => {
+      console.log("Error getting users by id", err)
+      reject(err)
+    })
+  })
+}
+
+export function searchUserByEmail(email) {
+  return new Promise((resolve, reject) => {
+    firestore.collection("users").where("email", "==", email).get()
+    .then(users => {
+      let result = null
+      users.forEach(user => {
+        if (result) { reject("fail") }
+        result = {
+          id: user.id,
+          ...user.data()
+        }
+      })
+      resolve({ message: `We were able to find ${result.displayName} in the database. Add as admin?`, data: result})
+    })
+    .catch(err => reject("fail"))
   })
 }
 
@@ -26,10 +75,10 @@ export function addUserToFirestore(email, firstName, lastName) {
 
 export function addUserToAdmins(id) {
   return new Promise((resolve, reject) => {
-    firestore.collection("users").doc("admins").set({
+    firestore.collection("users").doc("admins").update({
       [id]: true
     })
-    .then(success => resolve("success"))
+    .then(success => resolve("Success! User is now an Admin."))
     .catch(err => reject(err.message))
   })
 }
@@ -39,14 +88,13 @@ export function removeUserFromAdmins(id) {
     firestore.collection("users").doc("admins").update({
       [id]: firebase.firestore.FieldValue.delete()
     })
-    .then(success => resolve("success"))
+    .then(success => resolve("Success! User is no longer an Admin."))
     .catch(err => reject(err.message))
   })
 }
 
 export function determineIfAdmin(user, admins) {
   if (user && admins) {
-    debugger;
     if (admins[user.uid]) { return true }
   }
   return false

@@ -1,3 +1,4 @@
+import _ from "lodash"
 import firebase, { firestore } from "../firebase"
 import { formatDateForDescription } from "./formatters"
 
@@ -107,19 +108,22 @@ export function getPostsByDate(month, year) {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     const monthNum = months.indexOf(month)
     if (monthNum < 0) { reject("Invalid month") }
-    const result = new Array()
+    let result = new Array()
     firestore.collection("posts")
     .where("month", "==", monthNum)
     .where("year", "==", (year - 2000 + 100))
     .get()
     .then(posts => {
       posts.forEach(post => {
-        const postData = post.data()
+        let postData = post.data()
         result.push({
           postId: post.id,
           ...postData
         })
       })
+      debugger;
+      result = _.sortBy(result, ["datePosted"])
+      _.reverse(result)
       resolve(result)
     })
     .catch(err => reject(err.message))

@@ -51,7 +51,8 @@ module.exports = {
     }),
     new CopyPlugin({ patterns: [{ from: "_redirects" }] })
   ],
-  mode: process.env.NODE_ENV === "production" ? "production" : "development",
+  devtool: "source-map",
+  mode: "development",
   devServer: {
     historyApiFallback: true,
   }
