@@ -107,3 +107,31 @@ export function getAdmins() {
     .catch(err => reject(err.message))
   })
 }
+
+export function addPostToUserObject(user, postId) {
+  return new Promise((resolve, reject) => {
+    if (postId) {
+      firestore.collection("users").doc(user.uid).update({
+        posts: firebase.firestore.FieldValue.arrayUnion(postId)
+      })
+      .then(success => resolve("success"))
+    } else {
+      reject("ID was null")
+    }
+  })
+}
+
+export function removePostFromUserObject(user, postId) {
+  return new Promise((resolve, reject) => {
+    if (user && postId) {
+      const uid = user.uid
+      firestore.collection("users").doc(uid).update({
+        posts: firebase.firestore.FieldValue.arrayRemove(postId)
+      })
+      .then(success => resolve("success"))
+      .catch(err => reject(err.message))
+    } else {
+      reject("User or Post Id is null")
+    }
+  })
+}

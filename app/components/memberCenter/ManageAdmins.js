@@ -40,7 +40,7 @@ export default function ManageAdmins({ user }) {
   const handleSearch = () => {
     searchUserByEmail(newAdmin.current.value)
     .then(result => setResult(result))
-    .catch(err => setError(err))
+    .catch(err => setResult(err))
   }
 
   if (error) {

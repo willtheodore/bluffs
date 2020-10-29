@@ -8,7 +8,10 @@ export function retrievePostById(id) {
   return new Promise((resolve, reject) => {
     firestore.collection("posts").doc(id).get()
     .then(doc => {
-      resolve(doc.data())
+      resolve({
+        postId: doc.id,
+        ...doc.data()
+      })
     })
     .catch(err => {
       console.log("Error retrieiving posts", err)
@@ -17,11 +20,67 @@ export function retrievePostById(id) {
   })
 }
 
-export function setPostListenerById(id, handlePost) {
+export function getPostsByIds(ids) {
+  return new Promise((resolve, reject) => {
+    let promises = []
+    for (const id of ids) {
+      promises.push(retrievePostById(id))
+    }
+    Promise.all(promises)
+    .then(posts => (filterNullValues(posts)))
+    .then(posts => resolve(posts))
+    .catch(err => reject(err.message))
+  })
+}
+
+function filterNullValues(arrayOfObjects) {
+  let result = []
+  for (const object of arrayOfObjects) {
+    if (object) {
+      let clean = true
+      for (const key in object) {
+        if (!object[key]) { clean = false }
+      }
+      if (clean) { result.push(object) }
+    }
+  }
+  return result
+}
+
+export function deletePostById(id) {
+  return new Promise((resolve, reject) => {
+    firestore.collection("posts").doc(id).delete()
+    .then(success => resolve("success"))
+    .catch(err => reject(err.message))
+  })
+}
+
+export function setPostListenerById(id, handlePost, post) {
   const unsubscribe = firestore.collection("posts").doc(id).onSnapshot(doc => {
-    handlePost(doc.data())
+    handlePost({
+      postId: doc.id,
+      ...doc.data()
+    })
   })
   return unsubscribe
+}
+
+export function setPostListenerByIds(ids, setPosts) {
+  const unsubscriber = firestore.collection("posts").where(firebase.firestore.FieldPath.documentId(),"in", ids)
+  .onSnapshot(posts => {
+    let result = []
+    posts.forEach(post => {
+      const formattedPost = formatPosts([post.data()])[0]
+      result.push({
+        postId: post.id,
+        ...formattedPost
+      })
+    })
+    result = _.sortBy(result, ["datePosted"])
+    _.reverse(result)
+    setPosts(result)
+  })
+  return unsubscriber
 }
 
 // Returns a promise containing an array of JSON objects where each object represents a recent post
@@ -46,10 +105,23 @@ export function getRecentPosts(number) {
   })
 }
 
+export function updatePostTitleAndContent(postId, title, content) {
+  return new Promise((resolve, reject) => {
+    firestore.collection("posts").doc(postId).update({
+      title: title,
+      content: content,
+    })
+    .then(docRef => resolve(docRef))
+    .catch(err => reject(err.message))
+  })
+}
+
 export function formatPosts(posts) {
-  const result = posts.slice()
+  let result = posts.slice()
   for (const post of result) {
-    post.formattedDate = formatDateForDescription(post.datePosted)
+    if (post) {
+      post.formattedDate = formatDateForDescription(post.datePosted)
+    }
   }
   return result
 }
@@ -70,7 +142,7 @@ export function addNewPost(uid, displayName, timestamp, title, content) {
   })
 }
 
-export function postComment(postId, uid, displayName, timestamp, content, comments) {
+export function postComment({ postId, uid, displayName, timestamp, content, comments = null }) {
   return new Promise((resolve, reject) => {
     const newCommentKey = timestamp.getTime().toString()
     firestore.collection("posts").doc(postId).update({

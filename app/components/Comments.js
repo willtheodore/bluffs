@@ -3,6 +3,7 @@ import { FaTrash } from "react-icons/fa"
 import { formatComment } from "../utils/formatters"
 import { postComment, deleteCommentById } from "../utils/blog"
 import AuthContext from "../contexts/auth"
+import _ from "lodash"
 
 export default function Comments({ comments, postId }) {
   const styles = {
@@ -51,12 +52,19 @@ export default function Comments({ comments, postId }) {
 
   const handleSubmit = () => {
     const cVal = newComment.current.value
-    if (cVal && user && comments && postId) {
+    if (cVal && user && postId) {
       const uid = user.uid
       const authorName = user.displayName
       const timestamp = new Date(Date.now())
-
-      postComment(postId, uid, authorName, timestamp, cVal, comments)
+      const commentsObj = comments != undefined ? comments : null
+      postComment({
+        postId: postId,
+        uid: uid,
+        displayName: authorName,
+        timestamp: timestamp,
+        content: cVal,
+        comments: commentsObj
+      })
       .then(success => {
         setResult("success")
         newComment.current.value = ""

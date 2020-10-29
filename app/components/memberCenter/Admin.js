@@ -1,7 +1,9 @@
 import React from "react"
 import { FaPencilAlt, FaEdit, FaLock, FaCalendar } from "react-icons/fa"
+import { Route, Switch, useLocation } from "react-router-dom"
 import AuthContext from "../../contexts/auth"
 import Selector from "../Selector"
+import { parsePath } from "../../utils/formatters"
 
 const CreatePost = React.lazy(() => import("./CreatePost"))
 const CalendarEvents = React.lazy(() => import("./CalendarEvents"))
@@ -9,8 +11,9 @@ const ManagePosts = React.lazy(() => import("./ManagePosts"))
 const ManageAdmins = React.lazy(() => import("./ManageAdmins"))
 
 export default function Admin() {
-  const [selectedMode, setSelectedMode] = React.useState()
   const user = React.useContext(AuthContext)
+  const path = parsePath(useLocation())
+  const pathInContext = path[2]
 
   if (!user.isAdmin) {
     return (
@@ -27,13 +30,13 @@ export default function Admin() {
       <Selector
         icons={[ <FaPencilAlt />, <FaEdit />, <FaCalendar />, <FaLock />]}
         items={["Create Post", "Manage Posts", "Calendar Events", "Manage Admins"]}
-        setState={setSelectedMode}
+        linkDestinations={["createPost", "managePosts", "calendarEvents", "manageAdmins"]}
       />
       <React.Suspense>
-        {selectedMode === "Create Post" && <CreatePost user={user} />}
-        {selectedMode === "Manage Posts" && <ManagePosts />}
-        {selectedMode === "Calendar Events" && <CalendarEvents />}
-        {selectedMode === "Manage Admins" && <ManageAdmins user={user} />}
+        {pathInContext === "createPost" && <CreatePost user={user} />}
+        {pathInContext === "managePosts" && <ManagePosts />}
+        {pathInContext === "calendarEvents" && <CalendarEvents />}
+        {pathInContext === "manageAdmins" && <ManageAdmins user={user} />}
       </React.Suspense>
     </div>
   )

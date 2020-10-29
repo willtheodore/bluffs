@@ -1,5 +1,8 @@
 import React from "react"
 
+import { Link, useLocation } from "react-router-dom"
+import { parsePath } from "../utils/formatters"
+
 /**
  * A component that displays a horizontal bar from which users can select different options
  *
@@ -17,18 +20,36 @@ export default function Selector({ color = "#FFFFF3",
                                    fontSize = "18px",
                                    preSelected = null,
                                    icons = null,
-                                   items,
-                                   setState}) {
+                                   setState = null,
+                                   linkDestinations = null,
+                                   items }) {
   const [selected, setSelected] = React.useState(null)
+  const path = parsePath(useLocation())
 
   React.useEffect(() => {
     if (preSelected != null) { setSelected(preSelected) }
-    else { setSelected(items[0])}
+    else if (!linkDestinations) { setSelected(items[0])}
   }, [])
 
   React.useEffect(() => {
-    if (selected) { setState(selected) }
-    else { setState(null) }
+    if (linkDestinations) {
+      const initial = path[path.length - 1]
+      let index = 0
+      for (let i = 0; i < linkDestinations.length; i++) {
+        if (linkDestinations[i] === initial) {
+          index = i
+          break
+        }
+      }
+      setSelected(items[index])
+    }
+  }, [linkDestinations])
+
+  React.useEffect(() => {
+    if (setState) {
+      if (selected) { setState(selected) }
+      else { setState(null) }
+    }
   }, [selected])
 
   const styles = {
@@ -73,6 +94,18 @@ export default function Selector({ color = "#FFFFF3",
     }
   }
 
+  const getInnerContent = (index, item) => (
+    <React.Fragment>
+      {icons != null && (
+        <React.Fragment>
+          {icons[index]}
+          <div style={{width: "10px", display: "block"}}></div>
+        </React.Fragment>
+      )}
+      {item}
+    </React.Fragment>
+  )
+
   return (
     <div style={styles.container} className="selector">
       {title &&  (
@@ -90,16 +123,27 @@ export default function Selector({ color = "#FFFFF3",
               ...styles.active
             }
           }
+
+          if (linkDestinations) {
+            let destination = "/"
+            for (let i = 0; i < path.length - 1; i++) {
+              destination = destination.concat(path[i] + "/")
+            }
+            destination = destination.concat(linkDestinations[index] + "/")
+
+            return (
+              <li className="pointer" key={index} style={itemStyle} onClick={() => setSelected(item)}>
+                <Link to={destination}>
+                {getInnerContent(index, item)}
+                </Link>
+              </li>
+            )
+          }
+
           return (
-          <li className="pointer" key={index} style={itemStyle} onClick={() => setSelected(item)}>
-            {icons != null && (
-              <React.Fragment>
-                {icons[index]}
-                <div style={{width: "10px", display: "inline"}}></div>
-              </React.Fragment>
-            )}
-            {item}
-          </li>
+            <li className="pointer" key={index} style={itemStyle} onClick={() => setSelected(item)}>
+              {getInnerContent(index, item)}
+            </li>
         )})}
       </ul>
     </div>

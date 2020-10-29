@@ -2,6 +2,7 @@ import React from "react"
 import { FaChevronRight, FaNewspaper, FaBox, FaCalendarAlt, FaPenSquare, FaUserAlt, FaUserTie } from "react-icons/fa"
 import { Link, useLocation } from "react-router-dom"
 import AuthContext from "../../contexts/auth"
+import { parsePath } from "../../utils/formatters"
 
 function SidebarItem({ title, isActive, children, to }) {
   let style = {}
@@ -25,42 +26,42 @@ function SidebarItem({ title, isActive, children, to }) {
 
 export default function Sidebar({ isAdmin }) {
   const user = React.useContext(AuthContext)
-  const path = useLocation().pathname
+  const path = parsePath(useLocation())
 
   return (
     <div id="sidebar-wrapper">
       <div className="sidebar">
         <SidebarItem
           title="Recent Posts"
-          isActive={path === "/members/recent"}
+          isActive={path[1] === "recent"}
           to="/members/recent" >
           <FaNewspaper/>
         </SidebarItem>
 
         <SidebarItem
           title="Archive"
-          isActive={path === "/members/archive"}
+          isActive={path[1] === "archive"}
           to="/members/archive" >
           <FaBox/>
         </SidebarItem>
 
         <SidebarItem
           title="Calendar"
-          isActive={path === "/members/calendar"}
+          isActive={path[1] === "calendar"}
           to="/members/calendar" >
           <FaCalendarAlt/>
         </SidebarItem>
 
         <SidebarItem
           title="Sign-ups"
-          isActive={path === "/members/signups"}
+          isActive={path[1] === "signups"}
           to="/members/signups" >
           <FaPenSquare/>
         </SidebarItem>
 
         <SidebarItem
           title="Account"
-          isActive={path === "/members/account"}
+          isActive={path[1] === "account"}
           to="/members/account" >
           <FaUserAlt/>
         </SidebarItem>
@@ -68,8 +69,8 @@ export default function Sidebar({ isAdmin }) {
         {isAdmin && (
           <SidebarItem
             title="Admin"
-            isActive={path === "/members/admin"}
-            to="/members/admin">
+            isActive={path[1] === "admin"}
+            to="/members/admin/createPost">
             <FaUserTie/>
           </SidebarItem>
         )}

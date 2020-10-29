@@ -24,10 +24,12 @@ export default function BlogPost({ title, date, authorName, content, charLimit =
     header: {
       fontFamily: "heebo-medium",
       fontSize: "48px",
+      color: "black",
     },
     description: {
       fontFamily: "heebo-light",
       fontSize: "18px",
+      color: "black",
       margin: "0"
     },
     content: {
@@ -65,7 +67,7 @@ export default function BlogPost({ title, date, authorName, content, charLimit =
   }
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} className="blog-post-container">
       {getHeader()}
       <p style={styles.description}>
         {`by ${authorName} // posted ${date}`}
