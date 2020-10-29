@@ -1,8 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
 
-import { formatDateForDescription } from "../utils/formatters"
-
 export default function BlogPost({ title, date, authorName, content, charLimit = null, postId = null}) {
   const styles = {
     container: {

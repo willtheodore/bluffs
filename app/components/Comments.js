@@ -3,7 +3,6 @@ import { FaTrash } from "react-icons/fa"
 import { formatComment } from "../utils/formatters"
 import { postComment, deleteCommentById } from "../utils/blog"
 import AuthContext from "../contexts/auth"
-import _ from "lodash"
 
 export default function Comments({ comments, postId }) {
   const styles = {
@@ -73,16 +72,16 @@ export default function Comments({ comments, postId }) {
     }
   }
 
-  const getCommentsContent = comments => {
+  const getCommentsContent = commentsArray => {
     let content = []
-    for (const id in comments) {
-      const comment = comments[id]
+    for (const id in commentsArray) {
+      const comment = commentsArray[id]
       if (comment) {
         content.push(
           <li key={id}>
             <Comment
               comment={comment}
-              comments={comments}
+              comments={commentsArray}
               uid={user.uid}
               postId={postId}
               setResult={setResult}

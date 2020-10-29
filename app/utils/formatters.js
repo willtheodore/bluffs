@@ -70,15 +70,15 @@ export function parseSearch(location) {
           break;
         case "=":
           if (!paramEmpty && valueEmpty) {
-              result.[param] = true
+              result[param] = true
           } else {
             console.log("Returning null from parseSearch: unexpected token '='")
             return null
           }
           break;
         case "&":
-          if (result.[param] && !valueEmpty) {
-            result.[param] = value
+          if (result[param] && !valueEmpty) {
+            result[param] = value
             param = ""
             value = ""
           } else {
@@ -87,7 +87,7 @@ export function parseSearch(location) {
           }
           break;
         default:
-          if (result.[param]) {
+          if (result[param]) {
             value = value.concat(char)
           } else if (valueEmpty) {
             param = param.concat(char)
@@ -96,8 +96,8 @@ export function parseSearch(location) {
           }
       }
     }
-    if (result.[param]) {
-      result.[param] = value
+    if (result[param]) {
+      result[param] = value
     }
     return result
   }

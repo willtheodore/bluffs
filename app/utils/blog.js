@@ -91,8 +91,8 @@ export function getRecentPosts(number) {
     const posts = firestore.collection("posts")
 
     posts.orderBy("datePosted", "desc").limit(number).get()
-    .then(posts => {
-      posts.forEach(post => {
+    .then(docRefs => {
+      docRefs.forEach(post => {
         const data = post.data()
         result.push({
           ...data,
@@ -163,7 +163,6 @@ export function postComment({ postId, uid, displayName, timestamp, content, comm
 
 export function deleteCommentById(postId, id, comments) {
   return new Promise((resolve, reject) => {
-    let updates = { comments: null }
     const oldCommentKey = `comments.${id}`
     firestore.collection("posts").doc(postId).update({
       [oldCommentKey]: firebase.firestore.FieldValue.delete()

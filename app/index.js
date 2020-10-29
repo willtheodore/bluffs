@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom"
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import "./scss/index.scss"
 import { AuthProvider } from "./contexts/auth"
 import firebase from "./firebase"
@@ -15,9 +15,7 @@ const Contact = React.lazy(() => import("./pages/Contact"))
 const Members = React.lazy(() => import("./pages/Members"))
 
 function App() {
-  const [theme, setTheme] = React.useState("light")
   const [user, setUser] = React.useState(null)
-  const toggleTheme = () => setTheme((theme) => theme === "light" ? "dark" : "light")
 
   React.useEffect(() => {
     firebase.auth().onAuthStateChanged(userObj => {
